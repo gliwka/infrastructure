@@ -12,3 +12,9 @@ resource "bunnynet_dns_zone" "zone" {
   for_each = local.managed
   domain   = each.key
 }
+
+resource "gandi_nameservers" "nameserver" {
+    for_each = local.managed
+    domain = each.key
+    nameservers = [bunnynet_dns_zone.zone[each.key].nameserver1, bunnynet_dns_zone.zone[each.key].nameserver2]
+}

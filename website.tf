@@ -26,6 +26,9 @@ resource "bunnynet_pullzone" "website_cdn" {
   log_anonymized = true
   log_anonymized_style = "OneDigit" # Drop last octet
 
+  cache_enabled = true
+  cache_expiration_time = 60 * 60 * 24 * 365
+
   origin {
     type = "StorageZone"
     storagezone = bunnynet_storage_zone.website_storage.id

@@ -6,7 +6,7 @@ resource "bunnynet_storage_zone" "website_storage" {
   name      = "gliwka-eu-storage"
   region    = "DE"
   zone_tier = "Edge"
-  replication_regions = ["NY", "LA", "SG", "SYD", "UK", "SE"]
+  replication_regions = ["NY", "LA", "SG", "SYD", "UK", "SE", "BR", "JH"]
   custom_404_file_path = "/404.html"
 }
 

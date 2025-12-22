@@ -7,3 +7,8 @@ resource "gandi_livedns_domain" "livedns" {
     name = each.key
     automatic_snapshots = true
 }
+
+resource "bunnynet_dns_zone" "zone" {
+  for_each = local.managed
+  domain   = each.key
+}

@@ -1,6 +1,33 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
+provider "registry.terraform.io/bunnyway/bunnynet" {
+  version     = "0.11.4"
+  constraints = "0.11.4"
+  hashes = [
+    "h1:Lxm73aWmCGMJjrFTvqxEEs8JH3cO7xGBQxVZeUxAc1U=",
+    "zh:0a7732ddfb6086ca6b551ddbc3f0a87ece4e223c13c49e9d67308ca4bc59c0f1",
+    "zh:0ebd352fff915fbd3d83efd8f435f732de3c4ec11da9aa3cbcb65f7621504535",
+    "zh:33aea844a66dffc4bac8e443f3c9c8ff39edde4e3cf75b2191895bf4ad28dd40",
+    "zh:42ca5d96e5819bde8f6dcb555613a8a307f04f5182308412062531a6cac64b1a",
+    "zh:446016b6ea56da41cd246357fff05fa6ccfaf31f5d3b50cff14e5946b2979f3f",
+    "zh:48ae0837966ba28a40b47dcf01a4f393a37447b7cf8cfa67667a22bac45c2b1b",
+    "zh:72fb20c86bf5eba5ee3f888b4c7b2b5aafff2e5af5415eb2e8630a665df6e3f0",
+    "zh:767797de71aae7c5420d184747a086f21a6b437b34c05142807411731d17675a",
+    "zh:890df766e9b839623b1f0437355032a3c006226a6c200cd911e15ee1a9014e9f",
+    "zh:9255a3cb4bf6400843bee60881917a836fdf7af8cd69a59482a5ef6bf2f25ef9",
+    "zh:9d734c236d2150bd1a5e9891f56eb5e5ce89092c68499482a9d4d7490f67de09",
+    "zh:a0ab0ad02cb9be29ad0f41787b8c5012e9ffa6c97a5ce39930099c6a3946e32e",
+    "zh:a0b05e2894b6c82fd31e5ad904dfad0de3c42155a1653f90c11cfeed8b2bcc04",
+    "zh:b1405b14a88058a889d6255f2bf4152a86c3d6fe90b1e3514616a03a227257e8",
+    "zh:b6b53ad08d04fd2664331c1798dede7f9e817b5f271c475765732b175bad1bb3",
+    "zh:be2ead1f7e21b9e6f86d448d600e50628af7efe4a9653aec83852462f9929abc",
+    "zh:e23411a9ec8580f5d38f8c0ae83dabc9b1548d8cda5cd7875f72382885b387a2",
+    "zh:e759b4005e94a4850cc011bb7dae0319faadfe2f1843d56c5747e23a60adb471",
+    "zh:eb390f306ad602747d5b42fc37e20784d6a54c1c4c4ee1d6942ef0804af1f6b4",
+  ]
+}
+
 provider "registry.terraform.io/go-gandi/gandi" {
   version     = "2.3.0"
   constraints = "2.3.0"

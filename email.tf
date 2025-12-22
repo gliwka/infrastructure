@@ -15,7 +15,7 @@ locals {
   spf_record   = "v=spf1 include:mailbox.org include:_spf.google.com ~all"
   dmarc_record = "v=DMARC1; p=reject; rua=mailto:postmaster@gliwka.eu; adkim=s; aspf=s;"
 
-  # Flatten MX records (For Bunny)
+  # Flatten MX records
   mx_flat = flatten([
     for domain in local.emailDomains : [
       for mx in local.mx_config : {
@@ -27,7 +27,7 @@ locals {
     ]
   ])
 
-  # Flatten DKIM records (For Bunny)
+  # Flatten DKIM records
   dkim_flat = flatten([
     for domain in local.emailDomains : [
       for sel in local.dkim_selectors : {
@@ -41,22 +41,18 @@ locals {
 }
 
 # ==============================================================================
-# GROUP 1: GANDI LIVE DNS (Names restored to preserve state)
+# GROUP 1: GANDI LIVE DNS (Preserved State)
 # ==============================================================================
 
 resource "gandi_livedns_record" "mx" {
   for_each = local.emailDomains
-  
-  zone   = each.key
-  name   = "@"
-  type   = "MX"
-  ttl    = 18000
-  values = [
-    for mx in local.mx_config : "${mx.priority} ${mx.value}." 
-  ]
+  zone     = each.key
+  name     = "@"
+  type     = "MX"
+  ttl      = 18000
+  values   = [for mx in local.mx_config : "${mx.priority} ${mx.value}."]
 }
 
-# We must keep dkim_1..4 separate to match your existing state file
 resource "gandi_livedns_record" "dkim_1" {
   for_each = local.emailDomains
   zone     = each.key
@@ -112,27 +108,33 @@ resource "gandi_livedns_record" "dmarc" {
 }
 
 # ==============================================================================
-# GROUP 2: BUNNY.NET DNS
+# GROUP 2: BUNNY.NET DNS (Lowercased targets)
 # ==============================================================================
 
 resource "bunnynet_dns_record" "bunny_mx" {
   for_each = { for item in local.mx_flat : item.key => item }
+
+  # Ensure you reference the correct Zone resource name here
   zone  = bunnynet_dns_zone.zone[each.value.domain].id
-  
   type     = "MX"
   name     = ""
-  value    = each.value.value
+  
+  # CHANGE: Force lower() to match provider behavior
+  value    = lower(each.value.value)
+  
   priority = each.value.priority
   ttl      = 1800
 }
 
 resource "bunnynet_dns_record" "bunny_dkim" {
-  for_each = { for item in local.dkim_flat : item.key => item }
+  for_each = { for item in local.dkim_flat : lower(item.key) => item }
 
   zone = bunnynet_dns_zone.zone[each.value.domain].id
   type    = "CNAME"
-  name    = each.value.name
-  value   = each.value.value
+  name    = lower(each.value.name)
+  
+  value   = lower(each.value.value)
+  
   ttl     = 1800
 }
 

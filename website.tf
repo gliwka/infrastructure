@@ -36,6 +36,13 @@ resource "bunnynet_pullzone" "website_cdn" {
   }
 }
 
+resource "bunnynet_pullzone_hostname" "website_cdn_domain" {
+  pullzone    = bunnynet_pullzone.website_cdn.id
+  name        = local.website_domain
+  tls_enabled = true
+  force_ssl   = true
+}
+
 resource "bunnynet_dns_record" "website_cdn_dns" {
   zone = bunnynet_dns_zone.zone[local.website_domain].id
   name  = ""

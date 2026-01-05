@@ -29,6 +29,8 @@ resource "bunnynet_pullzone" "website_cdn" {
   cache_enabled = true
   cache_expiration_time = 60 * 60 * 24 * 365
 
+  tls_support = [] # Disable legacy TLS versions (1.0, 1.1)
+
   origin {
     type = "StorageZone"
     storagezone = bunnynet_storage_zone.website_storage.id

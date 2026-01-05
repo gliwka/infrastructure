@@ -90,7 +90,13 @@ resource "bunnynet_pullzone_edgerule" "website_security_headers" {
       # Disable all currently known features, c.f. https://www.permissionspolicy.com. Also opt out of FLoC tracking for our users.
       parameter2 = "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), interest-cohort=()"
       parameter3 = null
-    }
+    },
+    {
+      type       = "SetResponseHeader"
+      parameter1 = "Content-Security-Policy"
+      parameter2 = "default-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+      parameter3 = null
+    },
   ]
 
   match_type = "MatchAny"

@@ -132,3 +132,17 @@ resource "bunnynet_dns_record" "website_google_verify" {
   type  = "TXT"
   value = "google-site-verification=vwdtT1ZmNH3A_3MSbEVGBtnv0x2zjAUkzyBEHpwc_SQ"
 }
+
+resource "bunnynet_dns_record" "website_newsletter_dkim" {
+  zone = bunnynet_dns_zone.zone[local.website_domain].id
+  name  = "lettermint._domainkey"
+  type  = "TXT"
+  value = "v=DKIM1;k=rsa;p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsed6vM5Qq5JEalyP9/E9++CVX6Vtp0qfqBnllDFeoNb44Ho3fdEUpd9fPMGlTHAd5FU6vqLi5fS7sxgb9nrDzfB/sbz0DSWfIceXteTB7TMaSQajg+UTLLe5tB9SCw39hAUONmlIsLfMMt6qKCfIYQEx8rglo4haP0AFsBxj+vzfDhGh4uOexuw7IpgVsPlq2RjUhasZzbd3m/m8jRHRRUmU2mN/fNzxROmkqFeyfYKd33EGfAjd+7RULhkWiTViPrFbJjSYF5jmYam8lspvK2ma0pmHWNPjJwUsWA8hRUDemI9b9sU8efEGQAmRgZ9cMOwGMfBDyIgAFEH0UjRXzQIDAQAB"
+}
+
+resource "bunnynet_dns_record" "website_newsletter_bounces" {
+  zone = bunnynet_dns_zone.zone[local.website_domain].id
+  name  = "lm-bounces"
+  type  = "CNAME"
+  value = "bounces.lmta.net"
+}

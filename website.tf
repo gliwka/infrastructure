@@ -60,3 +60,10 @@ resource "bunnynet_dns_record" "website_www_redirect" {
   type  = "Redirect"
   value = "https://${local.website_domain}"
 }
+
+resource "bunnynet_dns_record" "website_google_verify" {
+  zone = bunnynet_dns_zone.zone[local.website_domain].id
+  name  = ""
+  type  = "TXT"
+  value = "google-site-verification=vwdtT1ZmNH3A_3MSbEVGBtnv0x2zjAUkzyBEHpwc_SQ"
+}

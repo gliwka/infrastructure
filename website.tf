@@ -48,6 +48,63 @@ resource "bunnynet_pullzone_hostname" "website_cdn_domain" {
   force_ssl   = true
 }
 
+
+resource "bunnynet_pullzone_edgerule" "website_security_headers" {
+  enabled     = true
+  pullzone    = bunnynet_pullzone.website_cdn.id
+
+  actions = [
+    {
+      type       = "SetResponseHeader"
+      parameter1 = "X-Frame-Options"
+      parameter2 = "DENY"
+      parameter3 = null
+    },
+    {
+      type       = "SetResponseHeader"
+      parameter1 = "X-Content-Type-Options"
+      parameter2 = "nosniff"
+      parameter3 = null
+    },
+    {
+      type       = "SetResponseHeader"
+      parameter1 = "Referrer-Policy"
+      parameter2 = "strict-origin-when-cross-origin"
+      parameter3 = null
+    },
+    {
+      type       = "SetResponseHeader"
+      parameter1 = "Strict-Transport-Security"
+      parameter2 = "max-age=63072000; includeSubDomains; preload"
+      parameter3 = null
+    },
+    {
+      type       = "SetResponseHeader"
+      parameter1 = "Cross-Origin-Opener-Policy"
+      parameter2 = "same-origin"
+      parameter3 = null
+    },
+    {
+      type       = "SetResponseHeader"
+      parameter1 = "Permissions-Policy"
+      # Disable all currently known features, c.f. https://www.permissionspolicy.com. Also opt out of FLoC tracking for our users.
+      parameter2 = "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=(), interest-cohort=()"
+      parameter3 = null
+    }
+  ]
+
+  match_type = "MatchAny"
+  triggers = [
+    {
+      type       = "Url"
+      match_type = "MatchAny"
+      patterns   = ["https://${local.website_domain}/*"]
+      parameter1 = null
+      parameter2 = null
+    }
+  ]
+}
+
 resource "bunnynet_dns_record" "website_cdn_dns" {
   zone = bunnynet_dns_zone.zone[local.website_domain].id
   name  = ""

@@ -40,86 +40,13 @@ locals {
   ])
 }
 
-# ==============================================================================
-# GROUP 1: GANDI LIVE DNS (Preserved State)
-# ==============================================================================
-
-resource "gandi_livedns_record" "mx" {
-  for_each = local.emailDomains
-  zone     = each.key
-  name     = "@"
-  type     = "MX"
-  ttl      = 18000
-  values   = [for mx in local.mx_config : "${mx.priority} ${mx.value}."]
-}
-
-resource "gandi_livedns_record" "dkim_1" {
-  for_each = local.emailDomains
-  zone     = each.key
-  name     = "${local.dkim_selectors[0]}._domainkey"
-  type     = "CNAME"
-  ttl      = 18000
-  values   = ["${local.dkim_selectors[0]}._domainkey.mailbox.org."]
-}
-
-resource "gandi_livedns_record" "dkim_2" {
-  for_each = local.emailDomains
-  zone     = each.key
-  name     = "${local.dkim_selectors[1]}._domainkey"
-  type     = "CNAME"
-  ttl      = 18000
-  values   = ["${local.dkim_selectors[1]}._domainkey.mailbox.org."]
-}
-
-resource "gandi_livedns_record" "dkim_3" {
-  for_each = local.emailDomains
-  zone     = each.key
-  name     = "${local.dkim_selectors[2]}._domainkey"
-  type     = "CNAME"
-  ttl      = 18000
-  values   = ["${local.dkim_selectors[2]}._domainkey.mailbox.org."]
-}
-
-resource "gandi_livedns_record" "dkim_4" {
-  for_each = local.emailDomains
-  zone     = each.key
-  name     = "${local.dkim_selectors[3]}._domainkey"
-  type     = "CNAME"
-  ttl      = 18000
-  values   = ["${local.dkim_selectors[3]}._domainkey.mailbox.org."]
-}
-
-resource "gandi_livedns_record" "spf" {
-  for_each = local.emailDomains
-  zone     = each.key
-  name     = "@"
-  type     = "TXT"
-  ttl      = 18000
-  values   = ["\"${local.spf_record}\""]
-}
-
-resource "gandi_livedns_record" "dmarc" {
-  for_each = local.emailDomains
-  zone     = each.key
-  name     = "_dmarc"
-  type     = "TXT"
-  ttl      = 18000
-  values   = ["\"${local.dmarc_record}\""]
-}
-
-# ==============================================================================
-# GROUP 2: BUNNY.NET DNS (Lowercased targets)
-# ==============================================================================
-
 resource "bunnynet_dns_record" "bunny_mx" {
   for_each = { for item in local.mx_flat : item.key => item }
 
-  # Ensure you reference the correct Zone resource name here
   zone  = bunnynet_dns_zone.zone[each.value.domain].id
   type     = "MX"
   name     = ""
   
-  # CHANGE: Force lower() to match provider behavior
   value    = lower(each.value.value)
   
   priority = each.value.priority
